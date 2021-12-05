@@ -1,0 +1,20 @@
+--- # tasks file for nodejs
+- name: Install node.js package globally
+  environment:
+    NVM_DIR: "{{nvm_dir}}"
+    NVM_SYMLINK_CURRENT: true
+    PATH: "{{nvm_dir}}/current/bin:{{ansible_facts.env.PATH}}"
+  community.general.npm:
+    name: "{{item}}"
+    global: yes
+  loop: "{{global_packages}}"
+
+- name: Install node.js package locally
+  environment:
+    NVM_DIR: "{{nvm_dir}}"
+    NVM_SYMLINK_CURRENT: true
+    PATH: "{{nvm_dir}}/current/bin:{{ansible_facts.env.PATH}}"
+  community.general.npm:
+    name: "{{item}}"
+    global: no
+  loop: "{{user_packages}}"
