@@ -1,0 +1,21 @@
+--- # defaults file for shell-completion
+go_install:
+  # Additional packages to install
+  []
+
+user_completions:
+  # Execute cmd to generate completion data.
+  # yq: shell-completion bash
+  {}
+user_completions_dir:
+  # Directory for user completions.
+  >-
+  {{ansible_facts.env.HOME}}/.local/share/bash-completion/completions
+
+global_completions: # Execute cmd to generate completion data.
+  # yq: shell-completion bash
+  {}
+
+global_completions_dir:
+  # Directory for global completions.
+  /etc/bash_completion.d

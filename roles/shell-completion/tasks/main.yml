@@ -1,0 +1,15 @@
+--- # tasks file for go
+- name: Install bash-completion package
+  become: yes
+  ansible.builtin.apt: { name: bash-completion }
+- name: Create bash_completions.d for user
+  ansible.builtin.file:
+    path: "{{user_completions_dir}}"
+    state: directory
+- name: Install user bash completion scripts
+  shell: "{{item.key}} {{item.value}}> {{user_completions_dir}}/{{item.key}}"
+  loop: "{{user_completions|dict2items}}"
+- name: Install global bash completion scripts
+  become: yes
+  shell: "{{item.key}} {{item.value}}> {{global_completions_dir}}/{{item.key}}"
+  loop: "{{global_completions|dict2items}}"
