@@ -1,0 +1,12 @@
+--- # defaults file for cmake-latest
+install_cmakelang:
+  # If true, install cmakelang which includes cmake-format.
+  no
+
+install_ccmake:
+  # If true, install the curses-based configuration utility ccmake.
+  no
+
+packages:
+  # Packages to download and install.
+  []

@@ -1,0 +1,28 @@
+--- # vars file for cmake-build
+make_targets:
+  # Make targets to invoke, in order.
+  - ""
+  - install
+
+version:
+  # Git commit-ish to checkout.
+  HEAD
+
+cmake_args:
+  # Args to pass to cmake.
+  - -DCATKIN_INSTALL_PREFIX=/usr/local
+
+package_with:
+  # Choose a way to package the code:
+  #
+  #   - checkinstall
+  #   - cpack
+  #
+  # or leave it null.
+  checkinstall
+
+source_dest:
+  # Destination for downloaded sources.
+
+repo:
+  # URL to repo.

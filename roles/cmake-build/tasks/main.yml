@@ -1,0 +1,39 @@
+--- # tasks file for cmake-build
+# - name: Clone, build, and install cmake packages.
+
+- name: Define download destination
+  set_fact:
+    local_repo: >-
+      {{(source_dest, repo|basename)|community.general.path_join}}
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: result
+    verbosity: 2
+
+- name: Create directory
+  file:
+    path: "{{local_repo}}"
+    state: directory
+
+- name: Clone source code
+  ansible.builtin.git:
+    repo: "{{repo}}"
+    dest: "{{local_repo}}"
+    version: "{{version}}"
+
+- name: Create build directory
+  file:
+    path: "{{local_repo}}/build"
+    state: directory
+
+- name: Execute cmake
+  command:
+    chdir: "{{local_repo}}/build"
+    argv: "{{['cmake'] + cmake_args + ['..'] }}"
+
+- name: Execute make target
+  make:
+    chdir: "{{local_repo}}/build"
+    target: item
+  loop: "{{make_targets}}"

@@ -1,0 +1,51 @@
+--- # tasks file for cmake-latest
+- name: Install Kitware signing key
+  become: yes
+  ansible.builtin.apt_key:
+    url: https://apt.kitware.com/keys/kitware-archive-latest.asc
+    keyring: /usr/share/keyrings/kitware-official.gpg
+
+- name: Add Kitware APT repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb
+      [signed-by=/usr/share/keyrings/kitware-official.gpg]
+      https://apt.kitware.com/ubuntu/
+      {{ansible_facts.distribution_release}}
+      main
+    filename: kitware-official
+
+- name: Install ccmake
+  become: yes
+  ansible.builtin.apt:
+    name: cmake
+
+- name: Install ccmake
+  become: yes
+  ansible.builtin.apt:
+    name: cmake-curses-gui
+  when: install_ccmake
+
+- name: Install cmakelang (cmake-format)
+  become: yes
+  ansible.builtin.pip:
+    name: cmakelang
+  when: install_cmakelang
+
+- name: Clone, build, and install cmake packages.
+  include_role:
+    name: cmake-build
+  vars:
+    package: "{{ item.source_dest }}"
+    repo: "{{ item.repo }}"
+    make_targets: "{{ item.make_targets }}"
+    version: "{{ item.version }}"
+    cmake_args: "{{ item.cmake_args }}"
+    state: directory
+  loop: |
+    {{
+      packages
+      if packages is iterable and packages is not string
+      else []
+    }}
