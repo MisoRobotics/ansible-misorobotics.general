@@ -1,0 +1,29 @@
+---
+namespace: misorobotics
+name: general
+version: 0.1.0
+readme: README.md
+authors:
+  - Ryan Sinnet <rsinnet@misorobotics.com>
+description: >-
+  Install and configure general functionality.
+license_file: LICENSE.md
+tags:
+  - build
+  - buildpacks
+  - container
+  - development
+  - docker
+  - go
+  - moby
+  - nodejs
+  - python
+dependencies: {}
+repository: >-
+  https://github.com/MisoRobotics/ansible-misorobotics.general.git
+documentation: >-
+  https://github.com/MisoRobotics/ansible-misorobotics.general/wiki
+homepage: >-
+  https://github.com/MisoRobotics/ansible-misorobotics.general/wiki
+issues: >-
+  https://github.com/MisoRobotics/ansible-misorobotics.general/issues
