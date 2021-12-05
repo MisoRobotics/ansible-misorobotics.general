@@ -1,0 +1,3 @@
+--- # defaults file for ansible-completion
+bash_completion_d: >-
+  {{ansible_facts.env.HOME}}/.local/share/bash-completion/completions
