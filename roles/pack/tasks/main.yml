@@ -1,0 +1,13 @@
+--- # tasks file for pack
+- name: Add CNCF APT repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: ppa:cncf-buildpacks/pack-cli
+- name: Install Pack CLI
+  become: yes
+  ansible.builtin.apt:
+    name: pack-cli
+- name: Install pack completion
+  ansible.builtin.lineinfile:
+    path: "{{ansible_facts.env.HOME}}/.bashrc"
+    line: . $(pack completion)
