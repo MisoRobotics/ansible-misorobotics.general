@@ -1,0 +1,48 @@
+--- # tasks file for docker-compose-v2
+- name: Get DEB architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture
+
+- name: Create cli-plugins directory
+  become: yes
+  ansible.builtin.file:
+    path: >-
+      {{install_prefix}}/lib/docker/cli-plugins
+    state: directory
+
+- name: Download docker-compose v2
+  become: yes
+  ansible.builtin.get_url:
+    url: >-
+      https://github.com/docker/compose/releases/download/{{docker_compose_version}}/docker-compose-{{ansible_system}}-{{ansible_architecture}}
+    checksum: "{{docker_compose_checksum}}"
+    dest: >-
+      {{install_prefix}}/lib/docker/cli-plugins/docker-compose
+    mode: 755
+
+- name: Download compose-switch
+  become: yes
+  ansible.builtin.get_url:
+    url: >-
+      https://github.com/docker/compose-switch/releases/download/{{compose_switch_version}}/docker-compose-{{ansible_system | lower}}-{{deb_architecture.stdout}}
+    checksum: "{{compose_switch_checksum}}"
+    dest: >-
+      {{install_prefix}}/bin/compose-switch
+    mode: 755
+
+- name: Remove docker-compose file
+  become: yes
+  ansible.builtin.file:
+    path: >-
+      {{install_prefix}}/bin/docker-compose
+    state: absent
+
+- name: Update alternatives for compose-switch
+  become: yes
+  community.general.alternatives:
+    name: docker-compose
+    link: >-
+      {{install_prefix}}/bin/docker-compose
+    path: >-
+      {{install_prefix}}/bin/compose-switch
+    priority: 99
