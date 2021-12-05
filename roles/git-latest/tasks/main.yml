@@ -1,0 +1,18 @@
+--- # tasks file for git-latest
+- name: Add git-core PPA
+  become: yes
+  ansible.builtin.apt_repository: { repo: ppa:git-core/ppa }
+- name: Install Git
+  become: yes
+  ansible.builtin.apt: { name: git }
+- name: Install Git LFS
+  become: yes
+  ansible.builtin.apt: { name: git-lfs }
+  when: lfs
+- name: Install Ryan's git bash completion library
+  become: yes
+  ansible.builtin.get_url:
+    dest: /etc/bash_completion.d/git-bash-aliases.bash
+    url: https://raw.githubusercontent.com/rsinnet/git-bash-aliases/master/git-bash-aliases.bash
+    mode: 0644
+  when: power_aliases

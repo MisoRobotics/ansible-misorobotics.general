@@ -1,0 +1,7 @@
+--- # defaults file for git-latest
+lfs:
+  # Install Git LFS.
+  yes
+power_aliases:
+  # Install helpful bash aliases for git.
+  yes
