@@ -1,0 +1,21 @@
+--- # tasks file for llvm-toolchain
+- name: Install LLVM signing key
+  become: yes
+  ansible.builtin.apt_key:
+    url: https://apt.llvm.org/llvm-snapshot.gpg.key
+    keyring: /etc/apt/trusted.gpg.d/llvm-official.gpg
+- name: Add LLVM APT repository
+  become: yes
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb [signed-by=/etc/apt/trusted.gpg.d/llvm-official.gpg]
+      https://apt.llvm.org/{{ansible_facts.distribution_release}}
+      llvm-toolchain-{{ansible_facts.distribution_release}}
+      {{version_fix}}
+      main
+    filename: llvm-official
+- name: Install LLVM packages
+  become: yes
+  ansible.builtin.apt:
+    name: "{{item}}{{version_fix}}"
+  loop: "{{packages}}"

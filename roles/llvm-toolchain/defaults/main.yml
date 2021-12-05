@@ -1,0 +1,13 @@
+--- # defaults file for llvm-toolchain
+llvm_version:
+  # Version to set or "latest".
+  latest
+
+version_fix:
+  # Do not modify.
+  >-
+  {{"{}-".format(llvm_version) if llvm_version != "latest" else ""}}
+
+packages:
+  # LLVM packages to install from the APT repository.
+  - clang
