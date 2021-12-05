@@ -1,0 +1,58 @@
+--- # tasks file for go
+- name: Get DEB architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture
+
+- name: Check go version
+  shell: go version
+  register: current_go_version
+  ignore_errors: yes
+
+- name: "go{{ go_version }} already installed"
+  set_fact:
+    go_already_installed: |
+      {{ (go_version|string) in current_go_version.stdout }}
+
+- name: Remove existing go installation
+  become: yes
+  file:
+    path: /usr/local/go
+    state: absent
+  when: not go_already_installed
+
+- name: "Install go{{ go_version }}.{{ ansible_facts.system | lower }}-{{ deb_architecture.stdout }}"
+  become: yes
+  unarchive:
+    src: |
+      https://storage.googleapis.com/golang/go{{ go_version }}.{{ ansible_facts.system | lower }}-{{ deb_architecture.stdout }}.tar.gz
+    dest: /usr/local
+    remote_src: yes
+  when: not go_already_installed
+
+- name: Add /usr/local/go/bin to PATH
+  become: yes
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    backrefs: yes
+    regexp: |-
+      PATH=(["]*)((?!.*?/usr/local/go/bin).*?)(["]*)$
+    line: |-
+      PATH=\1\2:/usr/local/go/bin\3
+
+- name: Add ~/go/bin to PATH
+  lineinfile:
+    dest: "{{ ansible_facts.env.HOME }}/.bashrc"
+    state: present
+    line: |-
+      PATH="${HOME}/go/bin${PATH:+:${PATH}}"
+
+- name: Install packages with go install
+  become: yes
+  shell: "go install {{ item }}"
+  loop: |
+    {{
+      go_install
+      if go_install is iterable and go_install is not string
+      else []
+    }}

@@ -1,0 +1,8 @@
+--- # defaults file for go
+go_version:
+  # Version of go to install.
+  "1.17.4"
+
+go_install:
+  # Additional packages to install
+  []
