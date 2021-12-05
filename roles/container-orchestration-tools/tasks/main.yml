@@ -1,0 +1,21 @@
+--- # tasks file for container-orchestration-tools
+- include_role: { role: docker-compose-v2 }
+- include_role: { role: pack }
+- include_role: { role: go }
+  vars:
+    go_install:
+      - github.com/mikefarah/yq/v4@latest
+      - sigs.k8s.io/kind@latest
+
+- name: Install kubectl
+  become: yes
+  ansible.builtin.apt: { name: kubectl }
+
+- name: Add bash completion
+  include_role: { role: shell-completion }
+  vars:
+    user_completions:
+      yq: shell-completion bash
+      kind: completion bash
+      kubectl: completion bash
+  tags: shell-completion
