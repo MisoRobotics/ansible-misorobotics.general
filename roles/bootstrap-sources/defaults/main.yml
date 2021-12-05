@@ -1,0 +1,36 @@
+--- # defaults file for bootstrap-sources
+sudo:
+  # Install sudo for privilege escalation.
+  yes
+
+ssh:
+  # Install openssh-client.
+  yes
+
+https:
+  # Install https APT method handler.
+  yes
+
+curl:
+  # Install curl.
+  yes
+
+wget:
+  # Install wget.
+  yes
+
+git:
+  # Install git.
+  yes
+
+github:
+  # Configure GitHub as a source.
+  yes
+
+github_protocol:
+  https
+  # Set to 'https' or 'ssh' to override the protocol.
+
+gpg:
+  # Install GNU Privacy Guard (GPG).
+  yes

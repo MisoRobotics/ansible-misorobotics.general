@@ -1,0 +1,49 @@
+--- # tasks file for bootstrap-sources
+- name: Install bootstrap dependencies
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - dbus
+      - lsb-release
+      - software-properties-common
+      - sudo
+      - dirmngr
+      - gpg
+      - apt-transport-https
+      - curl
+      - wget
+      - openssh-client
+
+- name: Create user .ssh directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.ssh"
+    state: directory
+    mode: 0700
+
+- name: Create user known_hosts file
+  ansible.builtin.file:
+    path: "{{ ansible_facts.env.HOME }}/.ssh/known_hosts"
+    state: touch
+    mode: 0600
+
+- name: Scan GitHub public key
+  shell: ssh-keyscan -t rsa github.com
+  register: github_keyscan
+
+- name: Mark GitHub as an authorized host
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_facts.env.HOME }}/.ssh/known_hosts"
+    line: "{{ github_keyscan }}"
+    state: present
+
+- name: Set protocol override for GitHub to HTTPS
+  when: github_protocol == 'https'
+  shell: |
+    git config --global --replace url."https://github.com/".insteadOf git@github.com:
+    git config --global --add url."https://github.com/".insteadOf ssh://git@github.com/
+
+- name: Set protocol override for GitHub to HTTPS
+  when: github_protocol == 'ssh'
+  shell: |
+    git config --global --replace url."git@github.com:".insteadOf https://github.com/
