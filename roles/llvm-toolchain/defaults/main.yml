@@ -3,11 +3,11 @@ llvm_version:
   # Version to set or "latest".
   latest
 
-version_fix:
+llvm_version_fix:
   # Do not modify.
   >-
   {{"{}-".format(llvm_version) if llvm_version != "latest" else ""}}
 
-packages:
+llvm_packages:
   # LLVM packages to install from the APT repository.
   - clang
