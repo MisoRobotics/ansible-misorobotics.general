@@ -9,7 +9,7 @@
   become: yes
   ansible.builtin.apt_repository:
     repo: >-
-      deb [Signed-By=/usr/share/keyrings/llvm-official.gpg]
+      deb [signed-by=/usr/share/keyrings/llvm-official.gpg]
       https://apt.llvm.org/{{ ansible_facts.distribution_release }}
       llvm-toolchain-{{ ansible_facts.distribution_release }}
       {{ llvm_version_fix }}
